@@ -36,14 +36,14 @@ Bu proje, **Low Earth Orbit (LEO)** uydu ağlarında gerçekleştirilen **TCP SY
 
 ```bash
 # Repository'yi klonla
-git clone https://github.com/username/leo-sdn-attack.git
-cd leo-sdn-attack
+git clone https://github.com/sahinebrar/leo-sdn.git
+cd leo-sdn
 
 # Docker image oluştur
-docker build -t leo-sdn-attack .
+docker build -t leo-sdn .
 
 # Container'ı başlat (privileged mod gerekli)
-docker run -it --privileged --name leo-sdn leo-sdn-attack
+docker run -it --privileged --name leo-sdn leo-sdn
 ```
 
 ### 2. Ryu Controller Başlat (Terminal 1)
