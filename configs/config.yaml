@@ -1,0 +1,85 @@
+# LEO SDN Attack Detection - Konfigürasyon Dosyası
+
+# Ağ Topolojisi Ayarları
+topology:
+  # LEO Uydu Parametreleri
+  satellites:
+    count: 12                    # Toplam uydu sayısı
+    orbital_planes: 3            # Orbital düzlem sayısı
+    satellites_per_plane: 4      # Her düzlemdeki uydu sayısı
+    altitude_km: 550             # Orbital yükseklik (km)
+    inclination_deg: 53          # Orbital eğim (derece)
+  
+  # Yer İstasyonları
+  ground_stations:
+    count: 4                     # Yer istasyonu sayısı
+    users_per_station: 3         # Her istasyondaki kullanıcı sayısı
+  
+  # Bağlantı Parametreleri
+  links:
+    isl_delay_ms: 10             # Inter-Satellite Link gecikmesi (ms)
+    isl_bandwidth_mbps: 1000     # ISL bant genişliği (Mbps)
+    downlink_delay_ms: 25        # Uydu-yer arası gecikme (ms)
+    downlink_bandwidth_mbps: 500 # Downlink bant genişliği (Mbps)
+    user_delay_ms: 5             # Kullanıcı-istasyon arası gecikme (ms)
+    user_bandwidth_mbps: 100     # Kullanıcı bant genişliği (Mbps)
+
+# SDN Controller Ayarları
+controller:
+  ip: "127.0.0.1"
+  port: 6633
+  protocol: "OpenFlow13"
+  stats_interval_sec: 5          # İstatistik toplama aralığı
+
+# Saldırı Tespit Ayarları
+detection:
+  # Eşik Değerleri
+  thresholds:
+    packet_rate: 1000            # Paket/saniye eşiği
+    syn_ratio: 0.8               # SYN oranı eşiği
+    entropy_low: 1.5             # Düşük entropy eşiği (saldırı)
+    entropy_high: 4.0            # Yüksek entropy eşiği (normal)
+  
+  # ML Model Ayarları
+  ml_model:
+    type: "random_forest"        # Model tipi: random_forest, svm, decision_tree
+    n_estimators: 100            # Random Forest ağaç sayısı
+    max_depth: 10                # Maksimum derinlik
+    test_size: 0.2               # Test veri oranı
+  
+  # Pencere Ayarları
+  window:
+    size_sec: 10                 # Analiz penceresi (saniye)
+    slide_sec: 5                 # Kaydırma aralığı (saniye)
+
+# Saldırı Simülasyonu Ayarları
+attack:
+  tcp_syn_flood:
+    rate_pps: 5000               # Paket/saniye
+    duration_sec: 30             # Saldırı süresi
+    spoof_ip: true               # IP spoofing aktif
+  
+  tcp_ack_flood:
+    rate_pps: 3000
+    duration_sec: 30
+    spoof_ip: true
+
+# Normal Trafik Ayarları
+normal_traffic:
+  http_rate: 50                  # HTTP istek/saniye
+  ping_interval: 1               # Ping aralığı (saniye)
+  duration_sec: 60               # Trafik süresi
+
+# Loglama Ayarları
+logging:
+  level: "INFO"                  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/sdn_attack.log"
+  max_size_mb: 10
+  backup_count: 5
+
+# IP Adresleme
+network:
+  satellite_subnet: "10.0.0.0/8"
+  ground_station_subnet: "192.168.0.0/16"
+  user_subnet: "172.16.0.0/12"
+
